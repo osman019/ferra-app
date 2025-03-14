@@ -1,33 +1,61 @@
 package com.ferreapp.application.usecase;
 
+
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import com.ferreapp.domain.entities.Eps;
 import com.ferreapp.repository.EpsRepository;
 
+
 public class EpsUsecase {
-    private final EpsRepository repository;
+    private final EpsRepository epsRepository;
 
-   public EpsUsecase(EpsRepository repository){
-    this.repository = repository;
-   }
+    public EpsUsecase(EpsRepository epsRepository) {
+        this.epsRepository = epsRepository;
+    }
 
-    public void save(int id, String name) {
+    public void save(String name) {
         Eps eps = new Eps(name);
-        repository.save(eps);
+        epsRepository.save(eps);
     }
 
-    public List<Eps> listAll() {
-        return repository.listAll();
+    public Eps findById(int id) {
+        return epsRepository.findById(id);
+    }
+    
+    public List<Eps> findAll() {
+        return epsRepository.findAll();
+    }
+    
+    public void update(int id, String name) {
+        Eps eps = new Eps(name);
+        eps.setId(id);
+        epsRepository.update(eps);
     }
 
-    public void update(int id, String name){
-        Eps eps = new Eps( name);
-        repository.update(eps);
+    public Map<Integer, Eps> findAllAsMap() {
+        return epsRepository.findAllAsMap();
     }
 
-    public void delete(int id){
-        repository.delete(id);
-    }
+    public void delete(int id) {
+        epsRepository.delete(id);
+    }   
 
+    public List<Eps> buscarPorNombreParcial(String termino) {
+        return epsRepository.findByNameContaining(termino);
+    }
+    
+    public Optional<Eps> buscarPorNombreExacto(String nombre) {
+        return epsRepository.findFirstByName(nombre);
+    }
+    
+    public Map<Integer, Eps> obtenerEpsPorIds(List<Integer> ids) {
+        return epsRepository.findByIds(ids);
+    }
+    
+    public List<Eps> buscarPorPrefijo(String prefijo) {
+        return epsRepository.findByNameStartingWith(prefijo);
+    }
 }
